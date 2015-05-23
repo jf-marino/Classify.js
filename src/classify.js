@@ -1,4 +1,5 @@
-var Classify = (function() {
+(function(namespace) {
+	
 	
 	function hasProp(prop, obj) {
 		return obj[prop] !== undefined ? true : false;
@@ -33,6 +34,7 @@ var Classify = (function() {
 	}
 	
 	// Transform any object into the classical inheritance format so it can be extended
+	/**
 	function classify(src) {
 		var proto = {}, _static = {};
 		for(var prop in src) {
@@ -48,12 +50,13 @@ var Classify = (function() {
 		
 		proto["static"] = _static;
 		
-		return Classify.Class(proto);
+		return classify.Class(proto);
 	}
+	*/
 	
-	classify.Class = function() {};
+	namespace.Class = function() {};
 	
-	classify.Class.extend = function(definition) {
+	namespace.Class.extend = function(definition) {
 		// Create the initial empty constructor
 		var _constructor = function() {};
 		var __super = this.prototype;
@@ -127,7 +130,38 @@ var Classify = (function() {
 		// Return the constructor function
 		return _constructor;
 	};
-	
-	return classify;
-	
-})();
+
+
+})( {} );
+/**
+ *	Add your prefered namespace as the argument passed to this function instead of {}.
+ *	That namespace will get a property called "Class" which can be extended
+ *	like this:
+ *	
+ *		var myClass = <your_namespace>.Class.extend({
+ *			
+ *			constructor: function() {...},
+ *			
+ *			static: {
+ *				aStaticProperty: ... ,
+ *				aStaticMethod: function() {...}
+ *			},
+ *			
+ *			methodOne: function() {...},
+ *			
+ *			methodTwo: function() {...},
+ *			
+ *			and so on...
+ *		});
+ *
+ *	Also any subclass of <your_namespace>.Class is extendable,
+ *	no matter how deep the subclass tree, i.e.
+ *
+ *		var anotherClass = myClass.extend({...});
+ *
+ *		var aThirdClass = anotherClass.extend({...});
+ *
+ *	You can create infinite levels of inheritance.
+ *	All "base" classes will inherit from <your_namespace>.Class, the rest can
+ *	inherit from any "base" classes or any of their subclasses.
+ */
